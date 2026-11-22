@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ミニゲーム置き場</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=M+PLUS+1p:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/*
+VOICE: 夜のゲームセンターの入口、軽快
+IDEA: ゲーム筐体が並ぶフロア。各カードが小さな筐体
+PICTURE: 各ゲームの画面をSVGで描いたカード
+COLOUR and TYPE: 深い藍 + 黄色アクセント、各ゲームの色 / DotGothic16 + M PLUS 1p
+LAYOUT: タイトル帯 → 筐体カード2列（スマホは1列）→ フッター
+*/
+:root{color-scheme:light dark;--bg:light-dark(#eef0fb,#0a0d24);--ink:light-dark(#141838,#eef0ff);--mut:light-dark(#4a5078,#a7add6);--cab:#161b45;--cab2:#22296a;--acc:#ffd23f}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "M PLUS 1p",system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(28px,5vw,64px) max(5vw,16px);max-width:980px;margin:0 auto}
+header h1{font:400 clamp(36px,7vw,56px)/1.05 "DotGothic16",monospace;margin:0 0 8px}
+header h1 span{color:#e0a800}
+header p{margin:0;color:var(--mut);max-width:34em}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:22px;margin-top:30px}
+.game{display:block;text-decoration:none;color:#eef0ff;background:linear-gradient(180deg,var(--cab2),var(--cab));border-radius:22px;padding:14px;box-shadow:0 14px 32px rgba(10,12,40,.3),inset 0 2px 0 rgba(255,255,255,.12);transition:transform .2s}
+.game:hover{transform:translateY(-4px)}
+.game:focus-visible{outline:3px solid var(--acc);outline-offset:3px}
+.game svg{display:block;width:100%;height:auto;border-radius:12px}
+.game h2{font:400 28px/1.2 "DotGothic16",monospace;margin:14px 6px 4px}
+.game p{margin:0 6px 12px;color:#cfd3f5}
+.play{display:inline-flex;align-items:center;min-height:44px;margin:0 6px 4px;padding:0 20px;border-radius:999px;background:var(--acc);color:#1a1530;font-weight:700}
+footer{color:var(--mut);font-size:14px;padding-top:28px}
+@media(prefers-reduced-motion:reduce){.game{transition:none}.game:hover{transform:none}}
+</style>
+</head>
+<body>
+<main class="band">
+  <header>
+    <h1>ミニゲーム<span>置き場</span></h1>
+    <p>ブラウザですぐ遊べる小さなゲームを置いています。どれもランキング付きなので、上位を狙ってみてください。</p>
+  </header>
+
+  <div class="grid">
+    <a class="game" href="/breakout/">
+      <svg viewBox="0 0 400 260" role="img" aria-label="ブロック崩しの画面">
+        <rect width="400" height="260" fill="#060818"/>
+        <g id="row"></g>
+        <rect x="160" y="226" width="80" height="10" rx="5" fill="#ffc23a"/>
+        <circle cx="230" cy="170" r="7" fill="#fff"/>
+        <path d="M230 170 L196 222" stroke="#ffffff40" stroke-width="2" stroke-dasharray="4 5"/>
+      </svg>
+      <h2>ブロック崩し</h2>
+      <p>ボールを打ち返して、すべてのブロックを壊そう。ステージが進むほど速くなります。</p>
+      <span class="play">遊ぶ ▶</span>
+    </a>
+
+    <a class="game" href="/snake/">
+      <svg viewBox="0 0 400 260" role="img" aria-label="スネークの画面">
+        <rect width="400" height="260" fill="#0b1020"/>
+        <g id="snake"></g>
+        <circle cx="290" cy="70" r="9" fill="#ff5d73"/>
+        <rect x="289" y="56" width="3" height="6" fill="#5ee38a"/>
+      </svg>
+      <h2>スネーク</h2>
+      <p>エサを食べて伸びるヘビを操作します。壁や自分にぶつからないように逃げ切ろう。</p>
+      <span class="play">遊ぶ ▶</span>
+    </a>
+  </div>
+
+  <footer>© ミニゲーム置き場</footer>
+</main>
+<script>
+{
+  // ブロック崩しのブロック
+  const colors=['#ff5d73','#ff9f43','#ffd23f','#5ee38a','#4fc3f7'];
+  let html='';
+  colors.forEach((c,r)=>{for(let i=0;i<8;i++)html+=`<rect x="${14+i*47}" y="${18+r*20}" width="42" height="15" rx="3" fill="${c}"/>`});
+  document.getElementById('row').innerHTML=html;
+
+  // スネークの体
+  const body=[[9,8],[8,8],[7,8],[6,8],[6,9],[6,10],[5,10],[4,10],[3,10]];
+  document.getElementById('snake').innerHTML=body.map(([x,y],i)=>
+    `<rect x="${x*20+2+40}" y="${y*20+2-80}" width="16" height="16" rx="${i?5:7}" fill="${i?`hsl(${135-i*3} 65% ${56-i*2}%)`:'#b6ff9c'}"/>`).join('');
+}
+</script>
+</body>
+</html>
